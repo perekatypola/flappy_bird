@@ -25,7 +25,9 @@ public class LogIn extends JFrame
         logpage.setLayout(null);
 
         lblPic.setBounds(0, 0, 500, 600);
+
         lblPic.setIcon(new ImageIcon(".\\sprites\\day2-bgr.jpg"));
+
 
         Log.setBounds(150, 300, 200, 30);
         Sign.setBounds(150,370,200,30);

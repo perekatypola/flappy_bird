@@ -33,7 +33,6 @@ public class Constants {
         ObstacleTypes.put(21 , ".\\sprites\\pipe-blue_north.png");
         ObstacleTypes.put(12, ".\\sprites\\pipe-red.png");
         ObstacleTypes.put(22 , ".\\sprites\\pipe-red_north.png");
-
     }
 
 
