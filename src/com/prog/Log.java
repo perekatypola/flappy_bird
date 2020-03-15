@@ -35,7 +35,7 @@ public class Log extends JFrame  {
         Pan.setLocation(0,0);
 
         JLabel img = new JLabel();
-        img.setIcon(new ImageIcon("D:\\4sem\\КПП\\sprites\\day2-bgr.jpg"));
+        img.setIcon(new ImageIcon(".\\sprites\\day2-bgr.jpg"));
         img.setBounds(0,0, 500, 600);
 
         log.setBackground(Color.white);

@@ -32,9 +32,9 @@ public class GameScreen extends JFrame implements ActionListener
         Timer timer = new Timer(20 , this);
         bird = new Bird(WIDTH / 2 - 10, HEIGHT / 2 - 10);
         setResizable(false);
-        backgroundImage  = new ImageIcon("D:\\4sem\\КПП\\sprites\\day2-bgr.jpg").getImage();
-        ground = new ImageIcon("D:\\4sem\\КПП\\sprites\\base.png").getImage();
-        flappybird = new ImageIcon("D:\\4sem\\КПП\\sprites\\blue_1.png").getImage();
+        backgroundImage  = new ImageIcon(".\\sprites\\day2-bgr.jpg").getImage();
+        ground = new ImageIcon(".\\sprites\\base.png").getImage();
+        flappybird = new ImageIcon(".\\sprites\\blue_1.png").getImage();
         Constants.Init();
         ofact = new ObstacleFactory();
         obstacle = ofact.createObstacle();
