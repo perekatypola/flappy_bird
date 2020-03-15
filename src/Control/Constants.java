@@ -7,12 +7,17 @@ import java.util.Map;
 public class Constants {
     public static final Map<Integer, String> ObstacleTypes = new HashMap<Integer, String>();
     public static final Map<Integer, String> BirdTypes = new HashMap<Integer, String>();
+    public static final int WIDTH = 500, HEIGHT = 600;
+    public static int groundx ;
+    public static final int groundy = HEIGHT - 100;
+    public static final int gap = 75;
+    public static final int quant_of_obstacles = 4;
 
     public Constants()
     {
         super();
     }
-    public void init()
+    public static void Init()
     {
         BirdTypes.put(11, "D:\\4sem\\КПП\\sprites\\blue_1.png");
         BirdTypes.put(21 , "D:\\4sem\\КПП\\sprites\\lue_2.png");
