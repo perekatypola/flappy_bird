@@ -19,21 +19,20 @@ public class Constants {
     }
     public static void Init()
     {
-        BirdTypes.put(11, "D:\\КПП\\sprites\\blue_1.png");
-        BirdTypes.put(21 , "D:\\КПП\\sprites\\lue_2.png");
-        BirdTypes.put(31, "D:\\КПП\\sprites\\blue_3.png");
-        BirdTypes.put(12 , "D:\\КПП\\sprites\\red_1.png");
-        BirdTypes.put(22, "D:\\КПП\\sprites\\red_2.png");
-        BirdTypes.put(32 , "D:\\КПП\\sprites\\red_3.png");
-        BirdTypes.put(12 , "D:\\КПП\\sprites\\yellow_1.png");
-        BirdTypes.put(22, "D:\\КПП\\sprites\\yellow_2.png");
-        BirdTypes.put(32 , "D:\\КПП\\sprites\\yellow_3.png");
+        BirdTypes.put(11, "\\КПП\\sprites\\blue_1.png");
+        BirdTypes.put(21 , ".\\sprites\\lue_2.png");
+        BirdTypes.put(31, ".\\sprites\\blue_3.png");
+        BirdTypes.put(12 , ".\\sprites\\red_1.png");
+        BirdTypes.put(22, ".\\sprites\\red_2.png");
+        BirdTypes.put(32 , ".\\sprites\\red_3.png");
+        BirdTypes.put(12 , ".\\sprites\\yellow_1.png");
+        BirdTypes.put(22, ".\\sprites\\yellow_2.png");
+        BirdTypes.put(32 , ".\\sprites\\yellow_3.png");
 
-        ObstacleTypes.put(11, "D:\\КПП\\sprites\\pipe-blue.png");
-        ObstacleTypes.put(21 , "D:\\КПП\\sprites\\pipe-blue_north.png");
-        ObstacleTypes.put(12, "D:\\КПП\\sprites\\pipe-red.png");
-        ObstacleTypes.put(22 , "D:\\КПП\\sprites\\pipe-red_north.png");
-
+        ObstacleTypes.put(11, ".\\sprites\\pipe-blue.png");
+        ObstacleTypes.put(21 , ".\\sprites\\pipe-blue_north.png");
+        ObstacleTypes.put(12, ".\\sprites\\pipe-red.png");
+        ObstacleTypes.put(22 , ".\\sprites\\pipe-red_north.png");
     }
 
 
