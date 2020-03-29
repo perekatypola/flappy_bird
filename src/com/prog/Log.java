@@ -121,12 +121,14 @@ public class Log extends JFrame  {
 
         oklog.addActionListener(e->{
                 frame.setVisible(false);
-                GameScreen.createAndShowGui();
+                GameScreen screen = new GameScreen("Game");
+                screen.createAndShowGui(screen);
             }
         );
         oksign.addActionListener(e->{
                     frame.setVisible(false);
-                    GameScreen.createAndShowGui();
+                    GameScreen screen = new GameScreen("Game");
+                    GameScreen.createAndShowGui(screen);
                 }
         );
 
