@@ -1,6 +1,10 @@
 package com.prog;
 
 import Control.Constants;
+import Data.WorkWithData;
+import Exeptions.EmptyString;
+import Exeptions.TooLong;
+import Exeptions.WrongUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,20 +73,20 @@ public class Log extends JFrame  {
         Pan.add(img);
         Pan.setSize(Constants.WIDTH,Constants.HEIGHT);
     }
-    public void AddComp(final Container pane)
-    {
-        GridLayout experimentLayout = new GridLayout(0,1);
-        JButton oklog  = new JButton("LogIn");
-        JTextField name = new  JTextField(20);
+    public void AddComp(final Container pane) {
+        GridLayout experimentLayout = new GridLayout(0, 1);
+        JButton oklog = new JButton("LogIn");
+        JTextField name = new JTextField(20);
         JPasswordField pasw = new JPasswordField(20);
         JLabel log = new JLabel("LogIn");
-        Init(log , oklog , name , pasw , logp ,experimentLayout);
+        Init(log, oklog, name, pasw, logp, experimentLayout);
 
-        JButton oksign  = new JButton("SignUp");;
-        JTextField names = new  JTextField(20);
+        JButton oksign = new JButton("SignUp");
+        ;
+        JTextField names = new JTextField(20);
         JPasswordField pasws = new JPasswordField(20);
         JLabel sign = new JLabel("SignUp");
-        Init(sign , oksign , names , pasws , signp ,experimentLayout);
+        Init(sign, oksign, names, pasws, signp, experimentLayout);
 
         pane.add(signp);
         pane.add(logp);
@@ -119,19 +123,64 @@ public class Log extends JFrame  {
                 }
         );*/
 
-        oklog.addActionListener(e->{
-                frame.setVisible(false);
-                GameScreen.createAndShowGui();
-            }
-        );
-        oksign.addActionListener(e->{
-                    frame.setVisible(false);
-                    GameScreen.createAndShowGui();
+        oklog.addActionListener(e -> {
+                    try {
+                        String pass = new String(pasw.getPassword());
+
+                        if (name.getText().isEmpty() || pass.isEmpty()) throw new EmptyString("The name field is empty!");
+                        if (pass.isEmpty()) throw new EmptyString("The password field is empty!");
+                        if(name.getText().length() > 25) throw new TooLong("The name is too long");
+                        if(pass.length() > 25) throw new TooLong("The password is too long");
+                        WorkWithData.getData();
+                        if(!Data.WorkWithData.checkUserLog(name.getText(), new String(pasw.getPassword()))) throw new WrongUser("User doesn't exist!");
+
+                        frame.setVisible(false);
+                        GameScreen.createAndShowGui();
+                    } catch (EmptyString er) {
+                        JOptionPane.showMessageDialog(frame, er.getMesage());
+                    }
+                    catch(TooLong err)
+                    {
+                        JOptionPane.showMessageDialog(frame, err.getMesage());
+                    }
+                    catch(WrongUser eror)
+                    {
+                        JOptionPane.showMessageDialog(frame, eror.getMesage());
+                    }
                 }
         );
 
+        oksign.addActionListener(e -> {
+            try {
+                String passs = new String(pasws.getPassword());
+
+                if (names.getText().isEmpty() || passs.isEmpty()) throw new EmptyString("The name field is empty!");
+                if (passs.isEmpty()) throw new EmptyString("The password field is empty!");
+                if(names.getText().length() > 25) throw new TooLong("The name is too long");
+                if(passs.length() > 25) throw new TooLong("The password is too long");
+                WorkWithData.getData();
+                if(Data.WorkWithData.checkUserSign(names.getText())) throw new WrongUser("User already exists!");
+
+                Data.WorkWithData.addUser(names.getText(), new String(pasws.getPassword()));
+                frame.setVisible(false);
+                GameScreen.createAndShowGui();
+
+            } catch (EmptyString er) {
+                JOptionPane.showMessageDialog(frame, er.getMesage());
+            }
+            catch(TooLong err)
+            {
+                JOptionPane.showMessageDialog(frame, err.getMesage());
+            }
+            catch(WrongUser eror)
+            {
+                JOptionPane.showMessageDialog(frame, eror.getMesage());
+            }
+                }
+        );
 
     }
+
     public static void createAndShowGui()
     {
         //Create and set up the window.
