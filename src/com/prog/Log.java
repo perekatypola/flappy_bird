@@ -91,38 +91,6 @@ public class Log extends JFrame  {
         pane.add(signp);
         pane.add(logp);
 
-         /*зайти в игру можно только после проверки, есть ли такой пользователь в системе
-        oklog.addActionListener(e->{
-
-            if(Data.WorkWithData.checkUser(name.getText(), new String(pasw.getPassword())))
-            {
-                frame.setVisible(false);
-                GameScreen.createAndShowGui();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(frame, "Wrong password or username!");
-            }
-        }
-        );
-
-        зарегистрироваться можно только если такого пользователя еще нет в системе
-        oksign.addActionListener(e->{
-
-                    if(Data.WorkWithData.checkUser(names.getText(), new String(pasws.getPassword())))
-                    {
-                        JOptionPane.showMessageDialog(frame, "This username already exists!");
-                    }
-                    else
-                    {
-                        Data.WorkWithData.addUser(name.getText(), new String(pasw.getPassword()));
-
-                        frame.setVisible(false);
-                        GameScreen.createAndShowGui();
-                    }
-                }
-        );*/
-
         oklog.addActionListener(e -> {
                     try {
                         String pass = new String(pasw.getPassword());
@@ -135,7 +103,8 @@ public class Log extends JFrame  {
                         if(!Data.WorkWithData.checkUserLog(name.getText(), new String(pasw.getPassword()))) throw new WrongUser("User doesn't exist!");
 
                         frame.setVisible(false);
-                        GameScreen.createAndShowGui();
+                        GameScreen screen = new GameScreen("Game");
+                        GameScreen.createAndShowGui(screen);
                     } catch (EmptyString er) {
                         JOptionPane.showMessageDialog(frame, er.getMesage());
                     }
@@ -163,7 +132,8 @@ public class Log extends JFrame  {
 
                 Data.WorkWithData.addUser(names.getText(), new String(pasws.getPassword()));
                 frame.setVisible(false);
-                GameScreen.createAndShowGui();
+                GameScreen screen = new GameScreen("Game");
+                GameScreen.createAndShowGui(screen);
 
             } catch (EmptyString er) {
                 JOptionPane.showMessageDialog(frame, er.getMesage());
@@ -176,7 +146,7 @@ public class Log extends JFrame  {
             {
                 JOptionPane.showMessageDialog(frame, eror.getMesage());
             }
-                }
+            }
         );
 
     }

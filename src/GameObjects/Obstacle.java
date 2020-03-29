@@ -10,13 +10,15 @@ import java.util.Random;
 public class Obstacle {
 
     private static ArrayList<String> Images; // картинки для нижней и верхней преграды
-    public static int x;
-    public static int y;
+    public int x;
+    public int y;
     public static final int min_height = 50;
     public static final int max_height = 300;
     public static final int width = 50;
-    public static int height;
+    public  int height;
     public static Random rand;
+    public Rectangle obstacles_hitmask;
+    public Rectangle obstaclen_hitmask;
 
     String south;
     String north;
@@ -36,9 +38,20 @@ public class Obstacle {
         rand  = new Random();
         height = height_;
     }
-    public static void paintObstacle(Graphics g , Image name , Image names, int xx , int yy,  int width , int height)
+//    Image name , Image names, int xx , int yy,  int width , int height
+   public void paintObstacle(Graphics g )
     {
-        g.drawImage(name , xx , yy , width , height ,  null); //рисуется верхняя труба
-        g.drawImage(names , xx  , height + 60 , width , Constants.HEIGHT - height - 60 - 100,  null);
+        g.drawImage(obstaclen , x , y , width , height ,  null); //рисуется верхняя труба
+        g.drawImage(obstacles, x  , height + 100 , width , Constants.HEIGHT - height - 100 - 100,  null);
+    }
+
+    public void set_the_mask(Graphics g)
+    {
+        Color a= new Color(0 , 0 , 0 , .0f);
+        g.setColor(a);
+        obstaclen_hitmask = new Rectangle(x , y , width, height);
+        g.fillRect(x , y , width  , height - 10);
+        obstacles_hitmask = new Rectangle(x , height + 100 + 5, width , height );
+        g.fillRect(x , height + 100 +15  , width - 10 , height );
     }
 }
