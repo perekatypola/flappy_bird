@@ -4,17 +4,19 @@ import Control.Constants;
 import Data.WorkWithData;
 import Exeptions.EmptyString;
 import Exeptions.TooLong;
+import Exeptions.TooManyThreads;
 import Exeptions.WrongUser;
+import Logic.Game;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static Control.Constants.*;
 
 public class Log extends JFrame  {
     private static Log frame;
     private final static JPanel logp = new JPanel();
     private final static JPanel signp = new JPanel();
+    public static boolean wasPressedSec = false;
+    public static boolean wasPressedFir = false;
 
     public Log(String name)
     {
@@ -91,7 +93,8 @@ public class Log extends JFrame  {
         pane.add(signp);
         pane.add(logp);
 
-        oklog.addActionListener(e -> {
+        oklog.addActionListener(e ->
+                {
                     try {
                         String pass = new String(pasw.getPassword());
 
@@ -101,26 +104,52 @@ public class Log extends JFrame  {
                         if(pass.length() > 25) throw new TooLong("The password is too long");
                         WorkWithData.getData();
                         if(!Data.WorkWithData.checkUserLog(name.getText(), new String(pasw.getPassword()))) throw new WrongUser("User doesn't exist!");
+                        if(Game.threads.size() < 2)
+                        {
+                            int x = 510 * (Game.threads.size() + 1);
+                                if (wasPressedFir == true) {
+                                    x = 510;
+                                }
 
-                        frame.setVisible(false);
-                        GameScreen screen = new GameScreen("Game");
-                        GameScreen.createAndShowGui(screen);
-                    } catch (EmptyString er) {
-                        JOptionPane.showMessageDialog(frame, er.getMesage());
+                                Game game = new Game(x);
+                                Game.threads.add(new Thread(game));
+                            if(wasPressedFir == true && wasPressedSec == true) {
+                                game.threadNum = 1;
+                                wasPressedSec = false;
+                                wasPressedFir = false;
+                            }
+                                if (wasPressedSec == false && wasPressedFir == false)
+                                    game.threadNum = Game.threads.size();
+                                else if (wasPressedSec == true) {
+                                    game.threadNum = 2;
+                                    wasPressedSec = false;
+                                } else if (wasPressedFir) {
+                                    game.threadNum = 1;
+                                    wasPressedFir = false;
+                                }
+                            Game.threads.get(Game.threads.size() - 1).start();
+                        }else {
+                            throw new TooManyThreads("You can't add third player. Please, end one of the sessions first");
+                        }
+                    } catch (EmptyString emptyString) {
+                        JOptionPane.showMessageDialog(frame, emptyString.getMesage());
                     }
-                    catch(TooLong err)
+                    catch(TooLong tooLong)
                     {
-                        JOptionPane.showMessageDialog(frame, err.getMesage());
+                        JOptionPane.showMessageDialog(frame,tooLong.getMesage());
                     }
-                    catch(WrongUser eror)
+                    catch(WrongUser wrongUser)
                     {
-                        JOptionPane.showMessageDialog(frame, eror.getMesage());
+                        JOptionPane.showMessageDialog(frame, wrongUser.getMesage());
+                    } catch (TooManyThreads tooManyThreads) {
+                        JOptionPane.showMessageDialog(frame,  tooManyThreads.getMesage());
                     }
+
                 }
         );
-
         oksign.addActionListener(e -> {
             try {
+
                 String passs = new String(pasws.getPassword());
 
                 if (names.getText().isEmpty() || passs.isEmpty()) throw new EmptyString("The name field is empty!");
@@ -131,10 +160,33 @@ public class Log extends JFrame  {
                 if(Data.WorkWithData.checkUserSign(names.getText())) throw new WrongUser("User already exists!");
 
                 Data.WorkWithData.addUser(names.getText(), new String(pasws.getPassword()));
-                frame.setVisible(false);
-                GameScreen screen = new GameScreen("Game");
-                GameScreen.createAndShowGui(screen);
+                if(Game.threads.size() < 2) {
 
+                        int x = 510 * (Game.threads.size() + 1);
+                        if (wasPressedFir == true) {
+                            x = 510;
+
+                        }
+                        Game game = new Game(x);
+                        Game.threads.add(new Thread(game));
+                        if(wasPressedFir == true && wasPressedSec == true) {
+                        game.threadNum = 1;
+                        wasPressedSec = false;
+                        wasPressedFir = false;
+                        }
+                        if (wasPressedSec == false && wasPressedFir == false)
+                            game.threadNum = Game.threads.size();
+                        else if (wasPressedSec == true) {
+                            game.threadNum = 2;
+                            wasPressedSec = false;
+                        } else if (wasPressedFir) {
+                            game.threadNum = 1;
+                            wasPressedFir = false;
+                        }
+                        Game.threads.get(Game.threads.size() - 1).start();
+                }
+                else
+                    throw new TooManyThreads("You can't add third player. Please, end one of the sessions first");
             } catch (EmptyString er) {
                 JOptionPane.showMessageDialog(frame, er.getMesage());
             }
@@ -145,8 +197,10 @@ public class Log extends JFrame  {
             catch(WrongUser eror)
             {
                 JOptionPane.showMessageDialog(frame, eror.getMesage());
+            } catch (TooManyThreads tooManyThreads) {
+                JOptionPane.showMessageDialog(frame,  tooManyThreads.getMesage());
             }
-            }
+        }
         );
 
     }

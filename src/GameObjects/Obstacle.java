@@ -51,7 +51,7 @@ public class Obstacle {
         g.setColor(a);
         obstaclen_hitmask = new Rectangle(x , y , width, height);
         g.fillRect(x , y , width  , height - 10);
-        obstacles_hitmask = new Rectangle(x , height + 100 + 5, width , height );
-        g.fillRect(x , height + 100 +15  , width - 10 , height );
+        obstacles_hitmask = new Rectangle(x , height + 100 + 5, width , Constants.HEIGHT - height - 100 - 15 );
+        g.fillRect(x , height + 100 +15  , width - 10 , Constants.HEIGHT - height - 100 - 15);
     }
 }
