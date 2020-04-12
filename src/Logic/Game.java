@@ -3,6 +3,7 @@ package Logic;
 import Control.Render;
 import GameObjects.Obstacle;
 import com.prog.GameScreen;
+
 import com.prog.User;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class Game implements Runnable{
     public ArrayList<Obstacle>  obstacles;
     public static ArrayList<Thread> threads = new ArrayList<>(); // лист потоков
     private int x;
+
     public User user;
 
     public Game(int x, User newUser)
@@ -30,7 +32,8 @@ public class Game implements Runnable{
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         if(Thread.currentThread().isInterrupted())
             return;
         GameScreen screen = new GameScreen("Game", this);
