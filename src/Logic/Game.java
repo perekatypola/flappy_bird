@@ -1,25 +1,39 @@
 package Logic;
 
+import Control.Render;
 import GameObjects.Obstacle;
+import com.prog.GameScreen;
+import com.prog.User;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
 
-public class Game {
+public class Game implements Runnable{
     private  ArrayList <Integer> Settings = new ArrayList<>();
     public boolean gameOver;
-    public boolean started;
-    public static int ticks;
-    public static int count;
-    public  ArrayList<Obstacle>  obstacles;
+    public int ticks;
+    public int count;
+    public int threadNum;
+    public ArrayList<Obstacle>  obstacles;
+    public static ArrayList<Thread> threads = new ArrayList<>(); // лист потоков
+    private int x;
+    public User user;
 
-    public Game()
+    public Game(int x, User newUser)
     {
         super();
         obstacles = new ArrayList<>();
-        count = 0;
+        this.x = x;
+        this.user = newUser;
     }
-    public static void AddColumn()
-    {
 
+    @Override
+    public void run() {
+        if(Thread.currentThread().isInterrupted())
+            return;
+        GameScreen screen = new GameScreen("Game", this);
+        screen.createAndShowGui(this.x);
     }
 }

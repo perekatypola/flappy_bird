@@ -38,8 +38,8 @@ public class Obstacle {
         rand  = new Random();
         height = height_;
     }
-//    Image name , Image names, int xx , int yy,  int width , int height
-   public void paintObstacle(Graphics g )
+    //    Image name , Image names, int xx , int yy,  int width , int height
+    public void paintObstacle(Graphics g )
     {
         g.drawImage(obstaclen , x , y , width , height ,  null); //рисуется верхняя труба
         g.drawImage(obstacles, x  , height + 100 , width , Constants.HEIGHT - height - 100 - 100,  null);
@@ -51,7 +51,7 @@ public class Obstacle {
         g.setColor(a);
         obstaclen_hitmask = new Rectangle(x , y , width, height);
         g.fillRect(x , y , width  , height - 10);
-        obstacles_hitmask = new Rectangle(x , height + 100 + 5, width , height );
-        g.fillRect(x , height + 100 +15  , width - 10 , height );
+        obstacles_hitmask = new Rectangle(x , height + 100 + 5, width , Constants.HEIGHT - height - 100 - 15 );
+        g.fillRect(x , height + 100 +15  , width - 10 , Constants.HEIGHT - height - 100 - 15);
     }
 }

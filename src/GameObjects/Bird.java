@@ -18,10 +18,10 @@ public class Bird {
 
     public Bird(int x , int y ,ArrayList<String> Img)
     {
-       super();
-       this.x = x;
-       this.y = y;
-       Images = Img;
+        super();
+        this.x = x;
+        this.y = y;
+        Images = Img;
     }
 
     public Image get_the_dir(char c)

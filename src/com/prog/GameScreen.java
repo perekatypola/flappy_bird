@@ -12,11 +12,8 @@ import GameObjects.Obstacle;
 import Logic.Game;
 
 import java.awt.event.*;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
 
-public class GameScreen extends JFrame implements ActionListener , MouseListener
+public class GameScreen extends JFrame implements ActionListener
 {
     //private static GameScreen frame;
     private static int WIDTH = 500;
@@ -29,107 +26,104 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
     private static Bird bird;
     private Rectangle bird_hitmask;
     private ObstacleFactory ofact;
-    public static boolean start;
+    public  boolean start;
     private BirdFactory bfact;
     private static Timer timer;
-    private static Game game;
+    private Game game;
     private static boolean flag = true;
 
-    private static User player;
-
-    public GameScreen(String name, User newPlayer)
+    public GameScreen(String name , Game game)
     {
         super(name);
-
-        player = newPlayer;
-
-        timer = new Timer(30 , this);
-
         setResizable(false);
 
+        //initialise fields
+        timer = new Timer(30 , this);
         backgroundImage  = new ImageIcon(".\\sprites\\day2-bgr.jpg").getImage();
         ground = new ImageIcon(".\\sprites\\base.png").getImage();
-
-        game = new Game();
-
+        this.game = game;
         Constants.Init();
-
         bfact = new BirdFactory();
         bird = bfact.createBird();
         bird_hitmask = new Rectangle();
-       // flappybird = new ImageIcon().getImage();
         ofact = new ObstacleFactory();
-        addMouseListener(this);
+
+        //add listeners
+        KeyListener keylstnr = new KeyPress();
+        addKeyListener(keylstnr);
+        WindowListener lstnr = new Terminator();
+        addWindowListener(lstnr);
+        MouseListener mouselstnr = new MousePres();
+        addMouseListener(mouselstnr);
         timer.start();
     }
-
-    public static void repaint(Graphics g)
+    public void repaint(Graphics g)
     {
-            g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null);
+        g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null);
+        g.drawImage(ground, Constants.groundx, Constants.groundy, WIDTH, 100, null);
+        if (Constants.WIDTH + Constants.groundx == 0) {
+            Constants.groundx = 0;
             g.drawImage(ground, Constants.groundx, Constants.groundy, WIDTH, 100, null);
-            if (Constants.WIDTH + Constants.groundx == 0) {
-                Constants.groundx = 0;
-                g.drawImage(ground, Constants.groundx, Constants.groundy, WIDTH, 100, null);
-            }
-            g.drawImage(ground, Constants.WIDTH + Constants.groundx, Constants.groundy, WIDTH, 100, null);
+        }
+        g.drawImage(ground, Constants.WIDTH + Constants.groundx, Constants.groundy, WIDTH, 100, null);
 
-            bird.y += Constants.vyn++;//- Constants.Gravity;
+        bird.y += Constants.vyn++;//- Constants.Gravity;
 
-            bird.y += Constants.vyp + Constants.Gravity;
+        bird.y += Constants.vyp + Constants.Gravity;
 
-            bird.set_the_mask(g);
+        bird.set_the_mask(g);
 
-
-            for (Obstacle temp : game.obstacles) {
-                temp.paintObstacle(g);
-                temp.set_the_mask(g);
-                if (bird.bird_hitmask.intersects(temp.obstaclen_hitmask) || bird.bird_hitmask.intersects(temp.obstacles_hitmask)) {
-                    game.gameOver = true;
-                }
-
-                int part = game.count;
-                Image score_3 = new ImageIcon(Constants.Numbers.get(part % 10)).getImage();
-                g.drawImage(score_3, WIDTH / 2, 10, 20, 30, null);
-
-                part /= 10;
-                Image score_2 = new ImageIcon(Constants.Numbers.get(part % 10)).getImage();
-                g.drawImage(score_2, WIDTH / 2 - 20, 10, 20, 30, null);
-
-                part /= 10;
-                Image score_1 = new ImageIcon(Constants.Numbers.get(part % 10)).getImage();
-                g.drawImage(score_1, WIDTH / 2 - 40, 10, 20, 30, null);
-
-                if (game.obstacles.get(0).x < 0) {
-                    flag = true; // разрешение на изменение счетчика
-                }
+        for (Obstacle temp : game.obstacles) {
+            temp.paintObstacle(g);
+            temp.set_the_mask(g);
+            if (bird.bird_hitmask.intersects(temp.obstaclen_hitmask) || bird.bird_hitmask.intersects(temp.obstacles_hitmask)) {
+                game.gameOver = true;
             }
 
-          g.drawImage(flappybird, bird.x, bird.y, bird.width, bird.height, null); //рисуется птица
+            int part = game.count;
+            Image score_3 = new ImageIcon(Constants.Numbers.get(part % 10)).getImage();
+            g.drawImage(score_3, WIDTH / 2, 10, 20, 30, null);
+
+            part /= 10;
+            Image score_2 = new ImageIcon(Constants.Numbers.get(part % 10)).getImage();
+            g.drawImage(score_2, WIDTH / 2 - 20, 10, 20, 30, null);
+
+            part /= 10;
+            Image score_1 = new ImageIcon(Constants.Numbers.get(part % 10)).getImage();
+            g.drawImage(score_1, WIDTH / 2 - 40, 10, 20, 30, null);
+
+            if (game.obstacles.get(0).x < 0) {
+                flag = true; // разрешение на изменение счетчика
+            }
+        }
+
+        g.drawImage(flappybird, bird.x, bird.y, bird.width, bird.height, null); //draw the bird
+
         if(game.gameOver == true)
         {
-            player.addRecord(game.count);
             gameOver = new ImageIcon(".\\sprites\\gameover.png").getImage();
             g.drawImage(gameOver, WIDTH/2 - 50, HEIGHT/2 - 50, 100, 100, null);
+            game.user.addRecord(game.count);
             timer.stop();
-            //com.prog.GameOver.createAndShowGUI(player);
         }
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        Game.ticks++;
+        game.ticks++;
         Constants.groundx-=5;
-        if(Game.ticks%2 == 0 )
+        if(game.ticks%2 == 0 )
         {
             flappybird = bird.get_the_dir('f');
 
         }
-        if(Game.ticks%3 == 0)
+        if(game.ticks%3 == 0)
         {
             flappybird = bird.get_the_dir('d');
         }
-        if(Game.ticks%5 == 0)
+        if(game.ticks%5 == 0)
         {
             flappybird = bird.get_the_dir('u');
         }
@@ -152,61 +146,68 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
             {
                 game.obstacles.add(ofact.createObstacle());
             }
-
-
             for (int i = 0; i < game.obstacles.size(); i++) {
 
                 game.obstacles.get(i).x -= 5;
-                if(flag == true && bird.x >=  game.obstacles.get(game.obstacles.size() - 1).x)
+                if(flag == true && bird.x >= game.obstacles.get(game.obstacles.size() - 1).x)
                 {
                     game.count++;
                     flag = false;
                 }
             }
         }
-       // int x_ = Game.obstacles.get(Game.obstacles.size() - 1).x;
-
         render.repaint();
     }
-    public static void createAndShowGui(GameScreen screen)
+    public  void createAndShowGui(int x)
     {
-        render = new Render();
+        render = new Render(this);
         //Create and set up the window.
-        screen.add(render);
-        screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        screen.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.add(render);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setLocation(x , 0);
         //Set up the content pane.
         //Display the window.
-        screen.pack();
-        screen.setVisible(true);
+        this.pack();
+        this.setVisible(true);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
+    class Terminator extends WindowAdapter {
 
+        public void windowClosing(WindowEvent e) {
+            if(game.threadNum == 2)
+                Log.wasPressedSec = true;
+            if(game.threadNum == 1)
+                Log.wasPressedFir = true;
+            if(game.threads.size() == 2) {
+                game.threads.get(game.threadNum - 1).interrupt();
+                game.threads.remove(game.threadNum - 1);
+            }
+            else {
+                game.threads.get(0).interrupt();
+                game.threads.remove(0);
+            }
+            dispose();
+        }
     }
-
-    @Override
-    public void mousePressed(MouseEvent e)
+    class KeyPress extends KeyAdapter
     {
-        Constants.Gravity = 1;
-        Constants.vyp = 9;
-        Constants.vyn = -20;
+        //@Override
+        public void keyPressed(KeyEvent e) {
+            //super.keyPressed(e);
+            Constants.Gravity = 1;
+            Constants.vyp = 9;
+            Constants.vyn = -20;
+        }
     }
 
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-
+    class MousePres extends MouseAdapter
+    {
+        public void mousePressed(MouseEvent e) {
+            Constants.Gravity = 1;
+            Constants.vyp = 9;
+            Constants.vyn = -20;
+        }
     }
 
 }
