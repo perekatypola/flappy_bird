@@ -12,6 +12,9 @@ import GameObjects.Obstacle;
 import Logic.Game;
 
 import java.awt.event.*;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
 public class GameScreen extends JFrame implements ActionListener , MouseListener
 {
@@ -31,9 +34,15 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
     private static Timer timer;
     private static Game game;
     private static boolean flag = true;
-    public GameScreen(String name)
+
+    private static User player;
+
+    public GameScreen(String name, User newPlayer)
     {
         super(name);
+
+        player = newPlayer;
+
         timer = new Timer(30 , this);
 
         setResizable(false);
@@ -43,9 +52,8 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
 
         game = new Game();
 
-
-
         Constants.Init();
+
         bfact = new BirdFactory();
         bird = bfact.createBird();
         bird_hitmask = new Rectangle();
@@ -54,11 +62,9 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
         addMouseListener(this);
         timer.start();
     }
+
     public static void repaint(Graphics g)
     {
-
-
-
             g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null);
             g.drawImage(ground, Constants.groundx, Constants.groundy, WIDTH, 100, null);
             if (Constants.WIDTH + Constants.groundx == 0) {
@@ -101,9 +107,11 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
           g.drawImage(flappybird, bird.x, bird.y, bird.width, bird.height, null); //рисуется птица
         if(game.gameOver == true)
         {
+            player.addRecord(game.count);
             gameOver = new ImageIcon(".\\sprites\\gameover.png").getImage();
             g.drawImage(gameOver, WIDTH/2 - 50, HEIGHT/2 - 50, 100, 100, null);
             timer.stop();
+            //com.prog.GameOver.createAndShowGUI(player);
         }
     }
 
@@ -149,7 +157,7 @@ public class GameScreen extends JFrame implements ActionListener , MouseListener
             for (int i = 0; i < game.obstacles.size(); i++) {
 
                 game.obstacles.get(i).x -= 5;
-                if(flag == true && bird.x >= game.obstacles.get(game.obstacles.size() - 1).x)
+                if(flag == true && bird.x >=  game.obstacles.get(game.obstacles.size() - 1).x)
                 {
                     game.count++;
                     flag = false;

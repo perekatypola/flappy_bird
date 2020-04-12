@@ -21,27 +21,28 @@ public class Log extends JFrame  {
         super(name);
         setResizable(false);
     }
+
     public static void setLogPan() 
     {
         signp.setVisible(false);
         logp.setVisible(true);
     }
+
     public static void setSignPan()
     {
         logp.setVisible(false);
         signp.setVisible(true);
     }
+
     //сделать функцию для инициализации двух панелей
-    public void Init(JLabel log , JButton oklog,  JTextField name, JPasswordField pasw , JPanel Pan , GridLayout experimentLayout)
+    public void Init(JLabel log , JButton oklog,  JTextField name, JPasswordField pasw , JPanel Pan, JButton back, JButton records)
     {
         Pan.setVisible(false);
         Pan.setLayout(null);
         Pan.setLocation(0,0);
 
         JLabel img = new JLabel();
-
         img.setIcon(new ImageIcon(".\\sprites\\day2-bgr.jpg"));
-
         img.setBounds(0,0, 500, 600);
 
         log.setBackground(Color.white);
@@ -54,7 +55,9 @@ public class Log extends JFrame  {
         username.setBackground(Color.white);
         username.setOpaque(true);
         username.setBounds(47, 162, 80, 25);
+
         name.setBounds(130, 160, 200, 30);
+        name.setText("");
 
         JLabel password = new JLabel("Password: ");
         password.setBackground(Color.white);
@@ -62,7 +65,17 @@ public class Log extends JFrame  {
         password.setBounds(47, 197, 80, 25);
 
         pasw.setBounds(130, 195, 200, 30);
+        pasw.setText("");
+
         oklog.setBounds(258, 240, 80, 20);
+
+        back.setBounds(10, 10, 80, 20);
+
+        if(Pan == logp)
+        {
+            records.setBounds(90, 240, 150, 20);
+            Pan.add(records);
+        }
 
         Pan.add(log);
         Pan.add(username);
@@ -71,25 +84,42 @@ public class Log extends JFrame  {
         Pan.add(pasw);
         Pan.add(oklog);
         Pan.add(img);
+        Pan.add(back);
         Pan.setSize(Constants.WIDTH,Constants.HEIGHT);
     }
-    public void AddComp(final Container pane) {
-        GridLayout experimentLayout = new GridLayout(0, 1);
+    public void AddComp(final Container pane)
+    {
         JButton oklog = new JButton("LogIn");
         JTextField name = new JTextField(20);
         JPasswordField pasw = new JPasswordField(20);
         JLabel log = new JLabel("LogIn");
-        Init(log, oklog, name, pasw, logp, experimentLayout);
+        JButton back = new JButton("Back");
+        JButton records = new JButton("View records");
+
+        Init(log, oklog, name, pasw, logp, back, records);
 
         JButton oksign = new JButton("SignUp");
-        ;
         JTextField names = new JTextField(20);
         JPasswordField pasws = new JPasswordField(20);
         JLabel sign = new JLabel("SignUp");
-        Init(sign, oksign, names, pasws, signp, experimentLayout);
+        JButton back1 = new JButton("Back");
+
+        Init(sign, oksign, names, pasws, signp, back1, records);
 
         pane.add(signp);
         pane.add(logp);
+
+        back.addActionListener(e ->
+        {
+            frame.setVisible(false);
+            LogIn.createAndShowGUI();
+        });
+
+        back1.addActionListener(e ->
+        {
+            frame.setVisible(false);
+            LogIn.createAndShowGUI();
+        });
 
         oklog.addActionListener(e -> {
                     try {
@@ -102,8 +132,9 @@ public class Log extends JFrame  {
                         WorkWithData.getData();
                         if(!Data.WorkWithData.checkUserLog(name.getText(), new String(pasw.getPassword()))) throw new WrongUser("User doesn't exist!");
 
+                        User user = new User(name.getText(), pass);
                         frame.setVisible(false);
-                        GameScreen screen = new GameScreen("Game");
+                        GameScreen screen = new GameScreen("Game", user);
                         GameScreen.createAndShowGui(screen);
                     } catch (EmptyString er) {
                         JOptionPane.showMessageDialog(frame, er.getMesage());
@@ -130,9 +161,10 @@ public class Log extends JFrame  {
                 WorkWithData.getData();
                 if(Data.WorkWithData.checkUserSign(names.getText())) throw new WrongUser("User already exists!");
 
+                User user = new User(names.getText(), passs);
                 Data.WorkWithData.addUser(names.getText(), new String(pasws.getPassword()));
                 frame.setVisible(false);
-                GameScreen screen = new GameScreen("Game");
+                GameScreen screen = new GameScreen("Game", user);
                 GameScreen.createAndShowGui(screen);
 
             } catch (EmptyString er) {
@@ -149,9 +181,37 @@ public class Log extends JFrame  {
             }
         );
 
+        records.addActionListener(e -> {
+                    try {
+                        String pass = new String(pasw.getPassword());
+
+                        if (name.getText().isEmpty() || pass.isEmpty()) throw new EmptyString("The name field is empty!");
+                        if (pass.isEmpty()) throw new EmptyString("The password field is empty!");
+                        if(name.getText().length() > 25) throw new TooLong("The name is too long");
+                        if(pass.length() > 25) throw new TooLong("The password is too long");
+                        WorkWithData.getData();
+                        if(!Data.WorkWithData.checkUserLog(name.getText(), new String(pasw.getPassword()))) throw new WrongUser("User doesn't exist!");
+
+                        User user = new User(name.getText(), pass);
+                        JOptionPane.showMessageDialog(frame, "Your record is " + user.getRecord());
+
+                    } catch (EmptyString er) {
+                        JOptionPane.showMessageDialog(frame, er.getMesage());
+                    }
+                    catch(TooLong err)
+                    {
+                        JOptionPane.showMessageDialog(frame, err.getMesage());
+                    }
+                    catch(WrongUser eror)
+                    {
+                        JOptionPane.showMessageDialog(frame, eror.getMesage());
+                    }
+                }
+        );
+
     }
 
-    public static void createAndShowGui()
+    public static void createAndShowGui(String pane)
     {
         //Create and set up the window.
         frame = new Log("LogIn/SignUp Page");
@@ -164,5 +224,8 @@ public class Log extends JFrame  {
         //Display the window.
         frame.pack();
         frame.setVisible(true);
+
+        if(pane == "Log") setLogPan();
+        if(pane == "Sign") setSignPan();
     }
 }

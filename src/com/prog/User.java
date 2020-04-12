@@ -1,5 +1,7 @@
 package com.prog;
 
+import Data.WorkWithData;
+
 public class User
 {
     private String name;
@@ -12,9 +14,16 @@ public class User
         password = newPassw;
     }
 
-    public void addRecord(Integer newRecord)
+    public void addRecord(int newRecord)
     {
-        record = newRecord;
+        WorkWithData.getAllRecords();
+
+        if(WorkWithData.getRecord(this.name) == 0 || WorkWithData.getRecord(this.name) < newRecord)
+        {
+            record = newRecord;
+            WorkWithData.addRecords(this.name, record);
+        }
+
     }
 
     public String getName()
@@ -27,8 +36,11 @@ public class User
         return this.password;
     }
 
-    public Integer getRecord()
+    public int getRecord()
     {
+        WorkWithData.getAllRecords();
+        this.record = WorkWithData.getRecord(this.name);
+
         return this.record;
     }
 }

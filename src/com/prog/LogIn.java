@@ -9,11 +9,13 @@ import java.awt.*;
 public class LogIn extends JFrame
 {
     private static LogIn frame;
+
     public LogIn(String name)
     {
         super(name);
         setResizable(false);
     }
+
     public void AddComp(final Container pane)
     {
         final JPanel logpage  = new JPanel();
@@ -41,17 +43,16 @@ public class LogIn extends JFrame
 
         Log.addActionListener(e-> {
                 frame.setVisible(false); // закрываем текущий фрейм
-                com.prog.Log.createAndShowGui();
-                com.prog.Log.setLogPan();
+                com.prog.Log.createAndShowGui("Log");
         });
 
         Sign.addActionListener(e->{
                 frame.setVisible(false); // закрываем текущий фрейм
-                com.prog.Log.createAndShowGui();
-                com.prog.Log.setSignPan();
+                com.prog.Log.createAndShowGui("Sign");
             }
         );
     }
+
     public static void createAndShowGUI() {
         //Create and set up the window.
         frame = new LogIn("Menu");

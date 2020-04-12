@@ -10,6 +10,8 @@ public class WorkWithData
 {
 
     private static HashMap<String, String> users = new HashMap<>();
+    private static HashMap<String, String> allRecords = new HashMap<>();
+
 
     public static void getData()
     {
@@ -23,6 +25,29 @@ public class WorkWithData
                 {
                     if(fis.read() == -1) break;
                     users.put((String)ois.readObject(), (String)ois.readObject());
+                }
+            }
+        }
+        catch(Exception ex){
+
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    public static void getAllRecords()
+    {
+
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("D://КПП//recordtable.txt"));
+            FileInputStream fis = new FileInputStream("D://КПП//recordtable.txt");
+        )
+        {
+            if(fis.available() != 0)
+            {
+                while(true)
+                {
+                    if(fis.read() == -1) break;
+                    allRecords.put((String)ois.readObject(), (String)ois.readObject());
                 }
             }
         }
@@ -68,17 +93,38 @@ public class WorkWithData
         }
     }
 
-    public static void addRecordsToDataBase(HashMap<String, Integer> allRecords)
+    public static void addRecords(String username, Integer newRecord)
     {
-        //добавление нового рекорда в базу данных
+        allRecords.put(username, newRecord.toString());
+
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("D://КПП//recordtable.txt", false))
+        )
+        {
+            for(HashMap.Entry<String, String> item: allRecords.entrySet())
+            {
+                oos.writeObject(item.getKey());
+                oos.writeObject(item.getValue());
+            }
+
+        }
+        catch(Exception ex){
+
+            System.out.println(ex.getMessage());
+        }
     }
 
-    public static HashMap<String, Integer> readRecordsFromDataBase()
+    public static int getRecord(String username)
     {
-        HashMap<String, Integer> records = new HashMap<>();
+        int res;
 
-        //чтение из базы данных в созданный выше hash map
+        if(allRecords.get(username) == null)
+        {
+            res = 0;
+        } else
+        {
+            res = Integer.parseInt(allRecords.get(username));
+        }
 
-        return records;
+        return res;
     }
 }

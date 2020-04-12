@@ -16,6 +16,7 @@ public class Game {
     {
         super();
         obstacles = new ArrayList<>();
+        count = 0;
     }
     public static void AddColumn()
     {
