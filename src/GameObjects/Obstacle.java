@@ -4,27 +4,27 @@ import Control.Constants;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Obstacle {
+public class Obstacle implements Serializable {
 
-    private static ArrayList<String> Images; // картинки для нижней и верхней преграды
+   // private static ArrayList<String> Images; // картинки для нижней и верхней преграды
     public int x;
     public int y;
     public static final int min_height = 50;
     public static final int max_height = 300;
     public static final int width = 50;
-    public  int height;
+    public int height;
     public static Random rand;
     public Rectangle obstacles_hitmask;
     public Rectangle obstaclen_hitmask;
 
-    String south;
-    String north;
+    public String south;
+    public String north;
 
     public Image  obstacles ;
-    public Image  obstaclen ;
+    public  Image  obstaclen ;
 
     public Obstacle(String s , String n , int height_ , int a)
     {

@@ -5,25 +5,31 @@ import javafx.scene.shape.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bird {
+public class Bird implements Serializable {
 
     public int x;
     public int y;
     public final int width  = 40;
     public final int height = 40;
-    private static ArrayList<String> Images; // для анимации
+    private static transient ArrayList<String> Images; // для анимации
     public Rectangle bird_hitmask;
+    private int key ;
 
-    public Bird(int x , int y ,ArrayList<String> Img)
+    public Bird(int x , int y ,ArrayList<String> Img , int key)
     {
         super();
         this.x = x;
         this.y = y;
         Images = Img;
+        this.key = key;
     }
-
+    public int getKeyForImage()
+    {
+        return key;
+    }
     public Image get_the_dir(char c)
     {
         Image bird = null;

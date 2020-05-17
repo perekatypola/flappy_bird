@@ -1,9 +1,9 @@
 package Data;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import Control.GameData;
+import Logic.Game;
+
+import java.io.*;
 import java.util.HashMap;
 
 public class WorkWithData
@@ -34,6 +34,36 @@ public class WorkWithData
         }
 
     }
+
+    public static void saveGame(String user , GameData game)
+    {
+        String path = "D://КПП//" + user + "_saved.txt";
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path, false))
+        )
+        {
+            oos.writeObject(game);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static public GameData resumeGame(String user)
+    {
+        GameData game = null;
+        String path = "D://КПП//" + user + "_saved.txt";
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path)))
+        {
+            game = (GameData)ois.readObject();
+        }
+        catch(Exception ex){
+
+            System.out.println(ex.getMessage());
+        }
+        return game;
+    }
+
 
     public static void getAllRecords()
     {
@@ -127,4 +157,5 @@ public class WorkWithData
 
         return res;
     }
+
 }

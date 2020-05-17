@@ -9,13 +9,12 @@ public class Constants {
     public static final Map<Integer, String> BirdTypes = new HashMap<Integer, String>();
     public static final Map<Integer, String> Numbers = new HashMap<Integer, String>();
     public static final int WIDTH = 500, HEIGHT = 600;
-    public static int groundx ;
-    public static final int groundy = HEIGHT - 100;
-    public static final int gap = 75;
-    public static final int quant_of_obstacles = 4;
-    public static int Gravity = 1;
-    public  static int vyn = -20;
-    public  static int vyp = 9;
+    public   int groundx ;
+    public  final int groundy = HEIGHT - 100;
+    public  final int gap = 75;
+    public   int Gravity = 1;
+    public   int vyn = -20;
+    public   int vyp = 9;
     public Constants()
     {
         super();
@@ -47,8 +46,6 @@ public class Constants {
         Numbers.put(7 , ".\\sprites\\7.png");
         Numbers.put(8 , ".\\sprites\\8.png");
         Numbers.put(9 , ".\\sprites\\9.png");
-
-
 
 
     }
